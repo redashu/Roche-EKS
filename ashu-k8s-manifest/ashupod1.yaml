@@ -1,0 +1,11 @@
+apiVersion: v1 
+kind: Pod 
+metadata: # info about Kind 
+  name: ashupod123  # name of my pod 
+spec: # info about application 
+  #nodeName: ip-192-168-17-188.ec2.internal 
+  containers: # info about containers 
+  - name: ashuc2  # name of container 
+    image: nginx  # docker image 
+    # ports:
+    # - containerPort: 80 
