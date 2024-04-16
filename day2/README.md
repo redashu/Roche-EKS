@@ -153,3 +153,153 @@ shivrajlb1   ClusterIP      10.100.195.222   <none>                             
 vishalb      LoadBalancer   10.100.221.77    aaabe799275b44b61a14d469b4367906-2108821066.us-east-1.elb.amazonaws.com   80:31155/TCP   42s
 ```
 
+### Intro to Ingress controller 
+
+<img src="ingress.png">
+
+### creating namespace 
+
+```
+kubectl  get  namespaces
+NAME              STATUS   AGE
+default           Active   25h
+kube-node-lease   Active   25h
+kube-public       Active   25h
+kube-system       Active   25h
+vishalns          Active   74s
+➜  ~ 
+➜  ~ kubectl  create  namespace  ashu-apps --dry-run=client -o yaml 
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: ashu-apps
+spec: {}
+status: {}
+➜  ~ kubectl  create  namespace  ashu-apps                          
+namespace/ashu-apps created
+➜  ~ kubectl  get  ns                                               
+NAME              STATUS   AGE
+ashu-apps         Active   10s
+default           Active   25h
+jains             Active   7s
+kube-node-lease   Active   25h
+kube-public       Active   25h
+kube-system       Active   25h
+vishalns          Active   2m34s
+
+```
+
+### setting default namespace 
+
+```
+kubectl config set-context --current --namespace ashu-apps
+Context "arn:aws:eks:us-east-1:751136288263:cluster/roche-eks-cp" modified.
+➜  ~ 
+➜  ~ kubectl  get pods                                         
+No resources found in ashu-apps namespace.
+```
+### checking current namespace
+
+```
+kubectl  config get-contexts                              
+CURRENT   NAME                                                      CLUSTER                                                   AUTHINFO                                                  NAMESPACE
+*         arn:aws:eks:us-east-1:751136288263:cluster/roche-eks-cp   arn:aws:eks:us-east-1:751136288263:cluster/roche-eks-cp   arn:aws:eks:us-east-1:751136288263:cluster/roche-eks-cp   ashu-apps
+➜  ~ 
+```
+
+### Creating deployment and ClustrerIP type service to personal namespace
+
+```
+ashu-k8s-manifest git:(master) ✗ kubectl  get deploy
+NAME          READY   UP-TO-DATE   AVAILABLE   AGE
+ashu-deploy   1/1     1            1           2m11s
+➜  ashu-k8s-manifest git:(master) ✗ kubectl  expose deployment  ashu-deploy  --type ClusterIP --port 80 --name ashulbinternal --dry-run=client -o y
+aml  >internalbks.yml 
+➜  ashu-k8s-manifest git:(master) ✗ kubectl apply -f internalbks.yml 
+service/ashulbinternal created
+➜  ashu-k8s-manifest git:(master) ✗ kubectl  get svc
+NAME             TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)   AGE
+ashulbinternal   ClusterIP   10.100.213.158   <none>        80/TCP    7s
+➜  ashu-k8s-manifest git:(master) ✗ 
+
+```
+
+### list of all Resources 
+
+```
+kubectl   api-resources 
+NAME                              SHORTNAMES   APIVERSION                        NAMESPACED   KIND
+bindings                                       v1                                true         Binding
+componentstatuses                 cs           v1                                false        ComponentStatus
+configmaps                        cm           v1                                true         ConfigMap
+endpoints                         ep           v1                                true         Endpoints
+events                            ev           v1                                true         Event
+limitranges                       limits       v1                                true         LimitRange
+namespaces                        ns           v1                                false        Namespace
+nodes                             no           v1                                false        Node
+persistentvolumeclaims            pvc          v1                                true         PersistentVolumeClaim
+persistentvolumes                 pv           v1                                false        PersistentVolu
+```
+
+## Deploy nginx ingress controller in EKS 
+
+```
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/aws/deploy.yaml
+namespace/ingress-nginx created
+serviceaccount/ingress-nginx created
+serviceaccount/ingress-nginx-admission created
+role.rbac.authorization.k8s.io/ingress-nginx created
+role.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx created
+clusterrole.rbac.authorization.k8s.io/ingress-nginx-admission created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx created
+rolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx created
+clusterrolebinding.rbac.authorization.k8s.io/ingress-nginx-admission created
+configmap/ingress-nginx-controller created
+service/ingress-nginx-controller created
+service/ingress-nginx-controller-admission created
+deployment.apps/ingress-nginx-controller created
+job.batch/ingress-nginx-admission-create created
+job.batch/ingress-nginx-admission-patch created
+ingressclass.networking.k8s.io/nginx created
+validatingwebhookconfiguration.admissionregistration.k8s.io/ingress-nginx-admission created
+
+```
+
+### verify 
+
+```
+ kubectl  get  deploy  -n  ingress-nginx  
+NAME                       READY   UP-TO-DATE   AVAILABLE   AGE
+ingress-nginx-controller   1/1     1            1           69s
+➜  ~ kubectl  get  po  -n  ingress-nginx  
+NAME                                        READY   STATUS      RESTARTS   AGE
+ingress-nginx-admission-create-97qnp        0/1     Completed   0          84s
+ingress-nginx-admission-patch-f8lp5         0/1     Completed   1          83s
+ingress-nginx-controller-7dcdbcff84-7hpts   1/1     Running     0          85s
+➜  ~ 
+➜  ~ 
+➜  ~ kubectl  get  svc  -n  ingress-nginx  
+NAME                                 TYPE           CLUSTER-IP       EXTERNAL-IP                                                                     PORT(S)                      AGE
+ingress-nginx-controller             LoadBalancer   10.100.64.86     a2946b9b5919a48a689598a91e8e5f61-98d0ef3b37e8048a.elb.us-east-1.amazonaws.com   80:31935/TCP,443:30687/TCP   100s
+ingress-nginx-controller-admission   ClusterIP      10.100.158.240   <none>                                                                          443/TCP                      99s
+
+```
+
+### URL for ingress controller 
+
+[click_here](https://kubernetes.io/docs/concepts/services-networking/ingress/)
+
+### deploy ingress rule 
+
+```
+ashu-k8s-manifest git:(master) ✗ kubectl  apply -f  ashu-ingress.yaml 
+ingress.networking.k8s.io/ashu-ingress-rule created
+➜  ashu-k8s-manifest git:(master) ✗ kubectl  get ing 
+NAME                CLASS   HOSTS               ADDRESS   PORTS   AGE
+ashu-ingress-rule   nginx   ashu.adhocnet.org             80      9s
+➜  ashu-k8s-manifest git:(master) ✗ 
+```
+
