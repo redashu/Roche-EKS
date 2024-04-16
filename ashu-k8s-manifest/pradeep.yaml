@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-dep2
+  name: ashu-dep2
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-dep2
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-dep2
+    spec:
+      containers:
+      - image: 751136288263.dkr.ecr.us-east-1.amazonaws.com/ashuapp:pradeep
+        name: ashuapp
+        resources: {}
+status: {}

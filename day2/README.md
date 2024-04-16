@@ -332,3 +332,19 @@ d28ce0e71605: Pushed
 9dcfeedea1f1: Pushed 
 751582986147: Pushed 
 ```
+
+### Intro to secret 
+
+<img src="sec.png">
+
+### Creating secret 
+
+```
+kubectl   create  secret   docker-registry  ashu-img-cred  --docker-server rocheindia.azurecr.io  --docker-username rocheindia      --docker-password="RBJnsvM"  --dry-run=client -o yaml
+```
+
+### Creating secret 
+
+```
+
+```

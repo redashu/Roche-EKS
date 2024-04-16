@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-depp
+  name: ashu-depp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-depp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-depp
+    spec:
+      imagePullSecrets: # calling secret 
+      - name: ashu-img-cred 
+      containers:
+      - image: rocheindia.azurecr.io/ashuapp:v1
+        name: ashuapp
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}

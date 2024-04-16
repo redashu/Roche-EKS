@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-dep
+  name: ashu-dep
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-dep
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-dep
+    spec:
+      containers:
+      - image: 751136288263.dkr.ecr.us-east-1.amazonaws.com/ashuapp:v1
+        name: ashuapp
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
