@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-deploy
+  name: ashu-deploy # name of deployment 
+spec:
+  replicas: 1  # number of pods 
+  selector:
+    matchLabels:
+      app: ashu-deploy
+  strategy: {} # app upgrade and deployment 
+  template: # for creating pods 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-deploy
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}

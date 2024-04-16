@@ -1,0 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ashu-ingress-rule  # here 
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx # change here 
+  rules:
+  - host: ashu.adhocnet.org  # my app domain name 
+    http:
+      paths:
+      - path: /  # change her 
+        pathType: Prefix
+        backend:
+          service:
+            name: ashulbinternal # my internal svc name 
+            port:
+              number: 80 # service port 

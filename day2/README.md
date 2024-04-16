@@ -303,3 +303,32 @@ ashu-ingress-rule   nginx   ashu.adhocnet.org             80      9s
 ➜  ashu-k8s-manifest git:(master) ✗ 
 ```
 
+### pushing image to ECR 
+
+```
+docker  tag  ashuapp:v1    751136288263.dkr.ecr.us-east-1.amazonaws.com/ashuapp:v1 
+➜  Roche-EKS git:(master) ✗ 
+➜  Roche-EKS git:(master) ✗ docker login  751136288263.dkr.ecr.us-east-1.amazonaws.com  
+Username: AWS
+Password: 
+➜  Roche-EKS git:(master) ✗ aws ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin 751136288263.dkr.ecr.us-east-1.amazonaws.com
+Login Succeeded
+➜  Roche-EKS git:(master) ✗ docker push   751136288263.dkr.ecr.us-east-1.amazonaws.com/ashuapp:v1  
+The push refers to repository [751136288263.dkr.ecr.us-east-1.amazonaws.com/ashuapp]
+7fe926aa0005: Preparing 
+1edd912be836: Preparing 
+d28ce0e71605: Preparing 
+9dcfeedea1f1: Preparing 
+751582986147: Preparing 
+f4b89c02f13e: Waiting 
+cadc9ff5e4f3: Waiting 
+d64c46ff900c: Waiting 
+name unknown: The repository with name 'ashuapp' does not exist in the registry with id '751136288263'
+➜  Roche-EKS git:(master) ✗ docker push   751136288263.dkr.ecr.us-east-1.amazonaws.com/ashuapp:v1  
+The push refers to repository [751136288263.dkr.ecr.us-east-1.amazonaws.com/ashuapp]
+7fe926aa0005: Pushed 
+1edd912be836: Pushed 
+d28ce0e71605: Pushed 
+9dcfeedea1f1: Pushed 
+751582986147: Pushed 
+```

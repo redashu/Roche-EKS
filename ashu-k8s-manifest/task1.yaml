@@ -1,0 +1,77 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  creationTimestamp: null
+  name: ashu-task
+spec: {}
+status: {}
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-deploy
+  name: ashu-deploy # name of deployment 
+  namespace: ashu-task 
+spec:
+  replicas: 1  # number of pods 
+  selector:
+    matchLabels:
+      app: ashu-deploy
+  strategy: {} # app upgrade and deployment 
+  template: # for creating pods 
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-deploy
+    spec:
+      containers:
+      - image: nginx
+        name: nginx
+        ports:
+        - containerPort: 80
+        resources: {}
+status: {}
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-deploy
+  name: ashulbinternal
+  namespace: ashu-task 
+spec:
+  ports:
+  - port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: ashu-deploy
+  type: ClusterIP
+status:
+  loadBalancer: {}
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ashu-ingress-rule  # here 
+  namespace: ashu-task
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx # change here 
+  rules:
+  - host: ashu.adhocnet.org  # my app domain name 
+    http:
+      paths:
+      - path: /  # change her 
+        pathType: Prefix
+        backend:
+          service:
+            name: ashulbinternal # my internal svc name 
+            port:
+              number: 80 # service port 
