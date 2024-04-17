@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-db
+  name: ashu-db
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-db
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-db
+    spec:
+      containers:
+      - image: mysql
+        name: mysql
+        envFrom: # reading values when Key and Env are same
+        -  secretRef: 
+            name: ashudb-generaldb-cred 
+        env: # create/ put env values
+        - name: MYSQL_ROOT_PASSWORD # setting admin password 
+          valueFrom: 
+            secretKeyRef:
+              name: ashudb-root-cred # name of secret 
+              key:  ashu-pass # key of secret 
+        - name: MYSQL_DATABASE # for creating default database 
+          valueFrom:
+            configMapKeyRef:
+              name: ashu-db-name 
+              key: mydb_name
+        
+        ports:
+        - containerPort: 3306
+        resources: {}
+status: {}

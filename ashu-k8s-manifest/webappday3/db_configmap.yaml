@@ -1,0 +1,7 @@
+apiVersion: v1
+data:
+  mydb_name: ashudbroche
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: ashu-db-name

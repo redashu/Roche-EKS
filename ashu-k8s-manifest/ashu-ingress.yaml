@@ -17,3 +17,11 @@ spec:
             name: ashulbinternal # my internal svc name 
             port:
               number: 80 # service port 
+
+      - path: /register  # change her /app/exams
+        pathType: Prefix
+        backend:
+          service:
+            name: loginsvc # my internal svc name 
+            port:
+              number: 8080 # service port 
