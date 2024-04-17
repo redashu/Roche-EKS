@@ -110,3 +110,10 @@ ashu-webapp-78d669d4f9-lfj4v   1/1     Running   0          11s
 ➜  ashu-k8s-manifest git:(master) ✗ 
 ```
 
+### Creating metric server in EKS
+
+```
+kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+
+```
+
