@@ -1,0 +1,32 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: ashu-webapp
+  name: ashu-webapp
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: ashu-webapp
+  strategy: {}
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: ashu-webapp
+    spec:
+      containers:
+      - image: wordpress:6.2.1-apache
+        name: wordpress
+        env: # calling env to connect DB 
+        - name: WORDPRESS_DB_HOST 
+          value: ashudb-lb # service name of db 
+        - name: WORDPRESS_DB_PASSWORD 
+          valueFrom:
+            secretKeyRef:
+              name: ashudb-root-cred #ashudb-generaldb-cred
+              key: ashu-pass  # MYSQL_USE
+        resources: {}
+status: {}

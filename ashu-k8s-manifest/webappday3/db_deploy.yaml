@@ -18,7 +18,7 @@ spec:
         app: ashu-db
     spec:
       containers:
-      - image: mysql
+      - image: mysql:8.0
         name: mysql
         envFrom: # reading values when Key and Env are same
         -  secretRef: 

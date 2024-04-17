@@ -77,3 +77,36 @@ ashu-db-799b5db8d8-tgr7p   1/1     Running   0          77s
 ```
 
 
+### Creating clusterIP type service for DB 
+
+```
+kubectl  expose  deployment  ashu-db   --port 3306  --name  ashudb-lb --dry-run=client -o yaml 
+apiVersion: v1
+kind: Service
+
+```
+### creating deployment for webapp
+
+```
+kubectl  create  deployment  ashu-webapp --image=wordpress:6.2.1-apache  --dry-run=client -o yaml 
+apiVersion: apps/v1
+
+```
+
+### running webapp deployment 
+
+```
+ ashu-k8s-manifest git:(master) ✗ kubectl apply -f webappday3 
+configmap/ashu-db-name configured
+deployment.apps/ashu-db configured
+secret/ashudb-root-cred configured
+secret/ashudb-generaldb-cred configured
+service/ashudb-lb configured
+deployment.apps/ashu-webapp created
+➜  ashu-k8s-manifest git:(master) ✗ kubectl  get  po
+NAME                           READY   STATUS    RESTARTS   AGE
+ashu-db-799b5db8d8-tgr7p       1/1     Running   0          83m
+ashu-webapp-78d669d4f9-lfj4v   1/1     Running   0          11s
+➜  ashu-k8s-manifest git:(master) ✗ 
+```
+
