@@ -1,0 +1,21 @@
+apiVersion: eksctl.io/v1alpha5
+kind: ClusterConfig
+metadata:
+  name: ashueks-cluster
+  region: ap-south-1 
+
+nodeGroups:
+  - name: ashu-nodegroup-1
+    instanceType: t2.small
+    desiredCapacity: 1
+    volumeSize: 20 
+    volumeType: gp2 
+    minSize: 1
+    maxSize: 3 
+
+fargateProfiles:
+  - name: ashu-fargate-1 
+    selectors: 
+      - namespace: default-ashu 
+        labels:
+          hello: ashu
