@@ -39,9 +39,17 @@ spec:
         app: wordpress
         tier: mysql
     spec:
+      volumes:
+      - name: ashudbvol1 
+        hostPath:
+          path: /opt/ashudbnew
+          type: DirectoryOrCreate 
       containers:
       - image: mysql:8.0
         name: mysql
+        volumeMounts:
+        - name: ashudbvol1
+          mountPath: /var/lib/mysql/ 
         env:
         - name: MYSQL_ROOT_PASSWORD
           valueFrom:

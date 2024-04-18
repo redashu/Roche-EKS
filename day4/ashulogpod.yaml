@@ -12,7 +12,13 @@ spec:
     hostPath: # choice like ebs , efs , s3 , hostpath , cm ,secret 
       path: /opt/ashudata 
       type: DirectoryOrCreate 
-  containers: # creation of container 
+  containers: # creation of container
+  - name: ashuwebc1 
+    image: nginx 
+    volumeMounts:
+    - name: ashuvol1
+      mountPath: /usr/share/nginx/html/
+      readOnly: true 
   - image: alpine
     name: ashulogpod
     volumeMounts: # mounting volume
