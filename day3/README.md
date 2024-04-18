@@ -117,3 +117,13 @@ kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/late
 
 ```
 
+### Creating HPA for wordpress 
+
+```
+ kubectl autoscale deployment  wordpress  --cpu-percent=70 --min=2 --max=15 --dry-run=client -o yaml 
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+
+```
+

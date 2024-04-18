@@ -48,4 +48,11 @@ spec:
         ports:
         - containerPort: 80
           name: wordpress
+        resources: # to assing limit in container 
+          requests:
+            memory: 100M 
+            cpu:  50m   # 1vcpu --- 1000 Milicore 
+          limits:
+            memory: 300M 
+            cpu: 200m  
 
