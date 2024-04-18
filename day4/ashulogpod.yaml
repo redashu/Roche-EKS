@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  creationTimestamp: null
+  labels:
+    run: ashulogpod
+  name: ashulogpod
+spec:
+  nodeName: ip-192-168-206-200.ec2.internal # static scheduling 
+  volumes: # creating of volume 
+  - name: ashuvol1 
+    hostPath: # choice like ebs , efs , s3 , hostpath , cm ,secret 
+      path: /opt/ashudata 
+      type: DirectoryOrCreate 
+  containers: # creation of container 
+  - image: alpine
+    name: ashulogpod
+    volumeMounts: # mounting volume
+    - name: ashuvol1
+      mountPath: /mnt/data/  # location inside container 
+    command: ["sh","-c","while true;do date >>/mnt/data/time.txt;sleep 5;done"] # replacement of Entrypoint 
+    resources:
+      limits:
+        memory: 200M
+        cpu: 50m 
+    imagePullPolicy: IfNotPresent 
+  dnsPolicy: ClusterFirst
+  restartPolicy: Always
+status: {}
